@@ -10,7 +10,7 @@ http://cafe.naver.com/securityplus/23805
 
 (영문) 워너크라이 동작에 대한 블로그 **(백신회사 Symantec 블로그)**
 
-https://www.symantec.com/connect/blogs/wannacry-ransomware-attacks-strong-links-lazarus-group
+https://www.symantec.com/connect/blogs/wannacry-ransomware-attacks-show-strong-links-lazarus-group
 
 &nbsp;
 
