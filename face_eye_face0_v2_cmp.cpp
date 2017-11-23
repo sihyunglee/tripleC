@@ -1,6 +1,8 @@
 /* 
- * ÇöÀç : ¾ó±¼/´« À§Ä¡ °è»ê ¹× ¾òÀº ¾ó±¼ Áß Ã¹ ¹øÂ° ¾ó±¼ »çÀÌÁî¿¡ ³ª¸ÓÁö ¾ó±¼ »çÀÌÁî¸¦ ¸ÂÃç¼­ warp
- * ¼öÁ¤ÇÒ ºÎºĞ : ´« À§Ä¡¿¡ µû¶ó ÀÌ¹ÌÁö rotation ÈÄ warping ÇÏµµ·Ï ¼öÁ¤
+ * í˜„ì¬ : ì–¼êµ´/ëˆˆ ìœ„ì¹˜ ê³„ì‚° ë° ì–»ì€ ì–¼êµ´ ì¤‘ ì²« ë²ˆì§¸ ì–¼êµ´ ì‚¬ì´ì¦ˆì— ë‚˜ë¨¸ì§€ ì–¼êµ´ ì‚¬ì´ì¦ˆë¥¼ ë§ì¶°ì„œ warp
+ * ìˆ˜ì •í•  ë¶€ë¶„ : ëˆˆ ìœ„ì¹˜ì— ë”°ë¼ ì´ë¯¸ì§€ rotation í›„ warping í•˜ë„ë¡ ìˆ˜ì •
+ *
+ * after editing
  */
 
 #include "opencv2/core.hpp"
@@ -43,12 +45,12 @@ int main(int argc, const char *argv[]) {
 	printf("face count : %d\n", faces.size());
 	Rect face_i;
 
-	// ÀÌ¹ÌÁö¿¡¼­ ¾ó±¼ºÎºĞ¸¸ ÀÚ¸¥´Ù. 
-	// »ç¿ëÇÏ´Â FR ¾Ë°í¸®Áò¿¡ µû¶ó »çÀÌÁî Á¶Á¤ ¹®Á¦ ¹ß»ı °¡´É.
+	// ì´ë¯¸ì§€ì—ì„œ ì–¼êµ´ë¶€ë¶„ë§Œ ìë¥¸ë‹¤. 
+	// ì‚¬ìš©í•˜ëŠ” FR ì•Œê³ ë¦¬ì¦˜ì— ë”°ë¼ ì‚¬ì´ì¦ˆ ì¡°ì • ë¬¸ì œ ë°œìƒ ê°€ëŠ¥.
 	Mat face;
 	Mat face_resized;
 
-	// ±âÁØÀÌ µÉ ¾ó±¼.(Ã¹¹øÂ° ¾ó±¼ÀÓ)
+	// ê¸°ì¤€ì´ ë  ì–¼êµ´.(ì²«ë²ˆì§¸ ì–¼êµ´ì„)
 	Mat std = origin(faces[0]);
 	//Mat sample = origin(faces[1]);
 	//Mat input = sample.clone();
@@ -57,18 +59,18 @@ int main(int argc, const char *argv[]) {
 	//imshow("sample", sample);
 
 	
-	/**************** ¾ó±¼ ¾È¿¡¼­ ´«Ã£±â ****************/
+	/**************** ì–¼êµ´ ì•ˆì—ì„œ ëˆˆì°¾ê¸° ****************/
 	for (int i = 0; i < faces.size(); i++) {
 		Rect face_i = faces[i];
 		Mat face = gray(face_i);
 		
-		// ´« À§Ä¡ Ã£±â
+		// ëˆˆ ìœ„ì¹˜ ì°¾ê¸°
 		eye_cas.detectMultiScale(face, eyes_, 1.2, 3, 0 | CV_HAAR_SCALE_IMAGE, Size(30, 30));
 		
 		for (int j = 0; j < eyes_.size(); j++) {
-			// ´« À§Ä¡¿¡ »ç°¢Çü ±×¸®±â. 
-			// »ç°¢ÇüÀÇ Á¤°¡¿îµ¥(³ôÀº È®·ü·Î ´«µ¿ÀÚ À§Ä¡¶ó°í °¡Á¤)¿¡ µ¿±×¶ó¹Ì ±×¸®±â
-			// -> ÀÌ ÄÚµå¿¡¼­ ´«µ¿ÀÚ À§Ä¡ °è»ê ¹æ½Ä
+			// ëˆˆ ìœ„ì¹˜ì— ì‚¬ê°í˜• ê·¸ë¦¬ê¸°. 
+			// ì‚¬ê°í˜•ì˜ ì •ê°€ìš´ë°(ë†’ì€ í™•ë¥ ë¡œ ëˆˆë™ì ìœ„ì¹˜ë¼ê³  ê°€ì •)ì— ë™ê·¸ë¼ë¯¸ ê·¸ë¦¬ê¸°
+			// -> ì´ ì½”ë“œì—ì„œ ëˆˆë™ì ìœ„ì¹˜ ê³„ì‚° ë°©ì‹
 			// Point(faceface_i.x + eyes_[j].x + eyes_[j].width / 2, face_i.y + eyes_[j].y + eyes_[j].height / 2) 
 			rectangle(origin, Rect(face_i.x + eyes_[j].x, face_i.y + eyes_[j].y, eyes_[j].width, eyes_[j].height), CV_RGB(0, 255, 0), 2);
 			circle(origin, Point(face_i.x + eyes_[j].x + eyes_[j].width / 2, face_i.y + eyes_[j].y + eyes_[j].height / 2), 3, Scalar(0, 0, 255), 3);
@@ -79,7 +81,7 @@ int main(int argc, const char *argv[]) {
 
 		while (waitKey(0) != 27);
 
-		// Warping Àü Point
+		// Warping ì „ Point
 		Point2f before[4];
 		printf("%d\n", faces[0].x);
 		printf("%d\n", faces[1].x);
@@ -89,7 +91,7 @@ int main(int argc, const char *argv[]) {
 		before[2] = Point2f(faces[1].x + faces[1].width, faces[1].y + faces[1].height);
 		before[3] = Point2f(faces[1].x, faces[1].y + faces[1].height);
 
-		// Warping ÈÄ Point
+		// Warping í›„ Point
 		Point2f after[4];
 		after[0] = Point2f(0, 0);
 		after[1] = Point2f(std.cols, 0);
@@ -98,7 +100,7 @@ int main(int argc, const char *argv[]) {
 		Size warpsize(faces[0].width, faces[0].height);
 		Mat warpImg(warpsize, sample.type());
 
-		// ±âÁØÀÌ µÉ ¾ó±¼¿¡ »ç°¢Çü ±×¸®±â 
+		// ê¸°ì¤€ì´ ë  ì–¼êµ´ì— ì‚¬ê°í˜• ê·¸ë¦¬ê¸° 
 		rectangle(origin, faces[0], CV_RGB(0, 255, 0), 2);
 
 		Mat trans = getPerspectiveTransform(before, after);
